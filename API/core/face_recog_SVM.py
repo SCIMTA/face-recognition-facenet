@@ -112,6 +112,7 @@ def reload_data(names):
     for path in os.listdir(image_dir_basepath):
         names.append(path)
 
+# retrain model if failed
 def re_train():
     reload_data(names)
     start_time_train = time()
@@ -128,13 +129,14 @@ def get_label():
     le.classes_ = np.load('./core/model/svc/label_final.npy')
     return le
 
-def predict(le, clf, pred_filepaths):
-    # print(pred_filepaths)
-    dirpaths = os.path.join(pred_filepaths)
-    filepaths = [os.path.join(dirpaths, f) for f in os.listdir(dirpaths)]
-    pred = infer(le, clf, filepaths)
-    name_predicted = pred[0]
-    return name_predicted
+## this shit won't work, but it's a part of history
+# def predict(le, clf, pred_filepaths):
+#     # print(pred_filepaths)
+#     dirpaths = os.path.join(pred_filepaths)
+#     filepaths = [os.path.join(dirpaths, f) for f in os.listdir(dirpaths)]
+#     pred = infer(le, clf, filepaths)
+#     name_predicted = pred[0]
+#     return name_predicted
 
 def calc_embs_per(np_face, margin=10, batch_size=1):
   aligned_images = prewhiten(np_face)
@@ -161,12 +163,10 @@ def predict_multiple_per(le, clf, pred_filepaths, margin=10):
             # pass
         else:
             img = cv2.imread(filepath)
-            print(filepath)
-            people.append([image_to_base64(img), "OriginalImage"])
+            people.append(['None', "OriginalImage"])
             faces = cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=3)
             # print(faces)
             for face in faces:
-                print(clf.predict)
                 aligned_images = []
                 (x, y, w, h) = face
                 cropped = img[y - margin // 2:y + h + margin // 2,
@@ -183,6 +183,7 @@ def predict_multiple_per(le, clf, pred_filepaths, margin=10):
                 name = pred[0]
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
                 cv2.putText(img, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+            people[0][0] = image_to_base64(img)
             # print(img)
             # return img
     # print("data to return", people)
