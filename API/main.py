@@ -5,7 +5,7 @@ from joblib import dump, load
 from fastapi import FastAPI, Header, Form, UploadFile, File
 from api.image_handle import upload_person, upload_predict
 
-app = FastAPI(docs_url="/ditconmemayhackcailon", redoc_url=None)
+app = FastAPI(docs_url="/chongtromcaponline", redoc_url=None)
 
 try:
     clf = load("./core/model/svc/faceReg_final.joblib")
