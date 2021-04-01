@@ -2,6 +2,7 @@ joblib
 scikit-image
 sklearn
 keras
-tensorflow
+tensorboard==2.4.1
 hashlib
 pandas
+opencv-python
