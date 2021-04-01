@@ -19,4 +19,4 @@ def upload_predict(image, le, clf):
 
     # convert data to json
     data = pd.DataFrame(result, columns={'base64', 'label'}).to_dict(orient='records')
-    return on_success(data)
+    return on_success(data=data, message='Thành công', status=200)

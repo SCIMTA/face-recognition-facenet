@@ -59,12 +59,11 @@ def load_and_align_images(filepaths, margin):
             print("face not found, file removed")
         else:
             print(faces)
-            for face in faces:
-                (x, y, w, h) = face
-                cropped = img[y - margin // 2:y + h + margin // 2,
-                          x - margin // 2:x + w + margin // 2, :]
-                aligned = resize(cropped, (image_size, image_size), mode='reflect')
-            # print(aligned.shape)
+            (x, y, w, h) = faces[0]
+            cropped = img[y - margin // 2:y + h + margin // 2,
+                      x - margin // 2:x + w + margin // 2, :]
+            aligned = resize(cropped, (image_size, image_size), mode='reflect')
+            # print(aligned.shape) 
             aligned_images.append(aligned)
     return np.array(aligned_images)
 
