@@ -60,9 +60,10 @@ def remove_bad_char(text):
 
 def upload_images(name, images):
     seed = "gC&!`Ud~?,K'7\\G"
+    datetime_now = str(datetime.now().strftime("%m%d%Y_%H%M%S"))
     folder = gen_md5(name + seed)
     # print(folder)                         #debug only
-    image_folder_path_root = os.getcwd() + "./core/data/images"
+    image_folder_path_root = os.getcwd() + "/core/data/images"
     image_folder_path_person = image_folder_path_root + "/" + folder
     if not os.path.exists(image_folder_path_root):
         print("Root folder not found, maybe server is hacked!")
@@ -74,6 +75,8 @@ def upload_images(name, images):
         image_filename = str(datetime.now().strftime("%m%d%Y_%H%M%S")) + '_' + str(rand_number) + ".jpg"
         with open(image_folder_path_person + '/' + image_filename, "wb") as buffer:
             shutil.copyfileobj(image.file, buffer)
+    print("Upload at " + str(datetime.now()) + ':', end='')
+    return image_folder_path_person
 
 def upload_single_image(image):
     seed = "RT-$44xg;.yK7Ms"
