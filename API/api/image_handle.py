@@ -8,7 +8,7 @@ from utils import on_fail, on_success
 def upload_person(name, images):
     try:
         path = upload_images(name, images)
-        print("{} | with label {}".format(path,name))
+        print("{} | with label '{}'".format(path,name))
         return on_success()
     except Exception as err:
         return on_fail(message=err)

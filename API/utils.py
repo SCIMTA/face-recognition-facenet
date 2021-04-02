@@ -59,15 +59,17 @@ def remove_bad_char(text):
     return text
 
 def upload_images(name, images):
-    seed = "gC&!`Ud~?,K'7\\G"
+    # seed = "gC&!`Ud~?,K'7\\G"         #we need other encrypt method
     datetime_now = str(datetime.now().strftime("%m%d%Y_%H%M%S"))
-    folder = gen_md5(name + seed)
+    folder = name.replace(" ", "_")
     # print(folder)                         #debug only
     image_folder_path_root = os.getcwd() + "/core/data/images"
     image_folder_path_person = image_folder_path_root + "/" + folder
+    if not os.path.exists(os.getcwd() + "/core/data/"):
+        os.mkdir(os.getcwd() + "/core/data/")
     if not os.path.exists(image_folder_path_root):
-        print("Root folder not found, maybe server is hacked!")
-        # os.mkdir(image_folder_path_root)
+        print("Root folder not found, maybe server is hacked! But we're creating...")
+        os.mkdir(image_folder_path_root)
     if not os.path.exists(image_folder_path_person):
         os.mkdir(image_folder_path_person)
     for image in images:
