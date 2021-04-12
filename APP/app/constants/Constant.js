@@ -7,7 +7,9 @@ module.exports = {
     LOGIN: "Login"
   },
   SCREEN_ROUTER_APP: {
-    MAIN: "MainScreen"
+    MAIN: "MainScreen",
+    ADD: "AddScreen",
+    EXPORT: "ExportScreen"
   },
   SPLASH: "Splash",
   API_STATUS: {

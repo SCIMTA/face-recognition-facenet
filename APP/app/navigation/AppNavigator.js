@@ -8,7 +8,8 @@ import {
   SCREEN_ROUTER_AUTH,
   SCREEN_ROUTER_APP
 } from "@constant";
-import AdminStaticsScreen from "@app/screens/app/AdminStatisticScreen";
+import MainScreen from "@app/screens/app/MainScreen";
+import AddScreen from "@app/screens/app/AddScreen";
 
 const Auth = createStackNavigator(
   {
@@ -19,7 +20,8 @@ const Auth = createStackNavigator(
 
 const AppStack = createStackNavigator(
   {
-    [SCREEN_ROUTER_APP.MAIN]: AdminStaticsScreen
+    [SCREEN_ROUTER_APP.MAIN]: MainScreen,
+    [SCREEN_ROUTER_APP.ADD]: AddScreen
   },
   { headerMode: "none", initialRouteName: SCREEN_ROUTER_APP.MAIN }
 );
@@ -27,11 +29,11 @@ export default createAppContainer(
   createSwitchNavigator(
     {
       [SPLASH]: SplashScreen,
-      [SCREEN_ROUTER.AUTH]: Auth,
+      // [SCREEN_ROUTER.AUTH]: Auth,
       [SCREEN_ROUTER.APP]: AppStack
     },
     {
-      initialRouteName: SPLASH
+      initialRouteName: SCREEN_ROUTER.APP
     }
   )
 );
