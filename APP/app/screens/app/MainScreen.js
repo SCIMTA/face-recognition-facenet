@@ -21,7 +21,7 @@ const MainScreen = props => {
     },
     {
       title: "Bắt đầu",
-      onPress: () => {}
+      onPress: () => NavigationUtil.navigate(SCREEN_ROUTER_APP.ACTION)
     },
     {
       title: "Xuất excel",
