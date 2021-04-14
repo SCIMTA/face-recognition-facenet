@@ -12,9 +12,10 @@ import InputText from "@app/components/InputText";
 import R from "@app/assets/R";
 import imagePickerHelper from "@app/utils/ImagePickerHelper";
 import FastImg from "@app/components/FastImage";
+import { ScrollView } from "react-native";
 
 const AddScreen = props => {
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {}, []);
 
@@ -24,31 +25,6 @@ const AddScreen = props => {
       titleHeader="Thêm"
       renderView={
         <>
-          <TouchableOpacity
-            onPress={() => {
-              imagePickerHelper(setImage);
-            }}
-            style={{
-              height: "30%",
-              backgroundColor: colors.primary,
-              margin: 15,
-              borderRadius: 10,
-              justifyContent: "center"
-            }}
-            children={
-              !!image ? (
-                <FastImg
-                  style={{ width: "100%", height: "100%" }}
-                  source={{ uri: image }}
-                />
-              ) : (
-                <WText
-                  style={{ textAlign: "center" }}
-                  children="Ảnh nhân viên"
-                />
-              )
-            }
-          />
           <InputText icon={R.images.ic_user} placeholder="Tên nhân viên" />
           <TouchableOpacity
             style={{
@@ -59,6 +35,50 @@ const AddScreen = props => {
               margin: 15
             }}
             children={<WText children="Xác nhận" />}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              imagePickerHelper(res => {
+                setImages(images.concat(res));
+              });
+            }}
+            style={{
+              height: "10%",
+              backgroundColor: colors.primary,
+              margin: 15,
+              borderRadius: 10,
+              justifyContent: "center"
+            }}
+            children={
+              <WText style={{ textAlign: "center" }} children="Ảnh nhân viên" />
+            }
+          />
+          <ScrollView
+            children={images.map((e, i) => (
+              <TouchableOpacity
+                key={i}
+                onPress={() => {}}
+                style={{
+                  // height: "35%",
+                  backgroundColor: colors.primary,
+                  margin: 10,
+                  borderRadius: 10
+                  // justifyContent: "center"
+                  // width: "100%"
+                }}
+                children={
+                  <FastImg
+                    style={{
+                      width: "100%",
+                      height: height / 5,
+                      alignSelf: "center",
+                      overflow: "hidden"
+                    }}
+                    source={{ uri: e }}
+                  />
+                }
+              />
+            ))}
           />
         </>
       }

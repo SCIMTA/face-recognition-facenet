@@ -10,7 +10,6 @@ import WText from "@app/components/WText";
 import { colors } from "@app/constants/Theme";
 import InputText from "@app/components/InputText";
 import R from "@app/assets/R";
-import ViewShot from "react-native-view-shot";
 import FastImg from "@app/components/FastImage";
 import { RNCamera, FaceDetector } from "react-native-camera";
 import { useRef } from "react";
@@ -18,8 +17,6 @@ let timeOut = null;
 const ActionScreen = props => {
   const [faces, setFaces] = useState([]);
   const camera = useRef(null);
-  const viewShot = useRef(null);
-  const [image, setImage] = useState(null);
   useEffect(() => {
     // console.log(camera.current);
   }, []);
@@ -27,64 +24,42 @@ const ActionScreen = props => {
   return (
     <ScreenComponent
       back
-      titleHeader="Thêm"
+      titleHeader="Điểm danh"
       renderView={
         <>
           <RNCamera
             ref={camera}
             type="front"
-            style={{ width: "100%", height: "50%" }}
-            onFacesDetected={async res => {
+            style={{ width: "100%", height: "80%" }}
+            onFacesDetected={res => {
               if (timeOut) clearTimeout(timeOut);
               setFaces(res.faces);
-
-              console.log("===========================");
-              console.log(res.faces[0].bounds.origin);
-              console.log(res.faces[0].bounds.size);
+              console.log("face_detect");
               timeOut = setTimeout(() => {
                 setFaces([]);
-              }, 300);
-              try {
-                if (!viewShot.current) return;
-                const uri = await viewShot.current.capture();
-                console.log(uri);
-                setImage(uri);
-              } catch (error) {}
+              }, 500);
             }}
-            faceDetectionMode={"accurate"}
-            faceDetectionLandmarks={"none"}
-            faceDetectionClassifications={"none"}
+            faceDetectionMode={FaceDetector.Constants.Mode.accurate}
+            faceDetectionLandmarks={FaceDetector.Constants.Landmarks.all}
+            faceDetectionClassifications={
+              FaceDetector.Constants.Classifications.all
+            }
           />
-          {faces.length > 0 && (
-            <ViewShot
-              ref={viewShot}
-              captureMode="update"
-              // options={{ result: "" }}
+          {faces.map((e, i) => (
+            <View
+              key={i}
               style={{
                 position: "absolute",
                 zIndex: 999,
                 borderWidth: 1,
                 borderColor: "white",
-                top: faces[0].bounds.origin.y,
-                left: faces[0].bounds.origin.x,
-                height: faces[0].bounds.size.height,
-                width: faces[0].bounds.size.width
-              }}
-            >
-              <View />
-            </ViewShot>
-          )}
-          {!!image && (
-            <FastImg
-              source={{ uri: image }}
-              style={{
-                width: "100%",
-                height: "20%",
-                backgroundColor: colors.primary,
-                marginTop: 80
+                top: e.bounds.origin.y,
+                left: e.bounds.origin.x,
+                height: e.bounds.size.height,
+                width: e.bounds.size.width
               }}
             />
-          )}
+          ))}
         </>
       }
     />
