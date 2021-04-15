@@ -13,6 +13,7 @@ import R from "@app/assets/R";
 import imagePickerHelper from "@app/utils/ImagePickerHelper";
 import FastImg from "@app/components/FastImage";
 import { ScrollView } from "react-native";
+import { FlatList } from "react-native";
 
 const AddScreen = props => {
   const [images, setImages] = useState([]);
@@ -26,59 +27,78 @@ const AddScreen = props => {
       renderView={
         <>
           <InputText icon={R.images.ic_user} placeholder="Tên nhân viên" />
-          <TouchableOpacity
-            style={{
-              alignSelf: "center",
-              backgroundColor: colors.primary,
-              padding: 10,
-              borderRadius: 5,
-              margin: 15
-            }}
-            children={<WText children="Xác nhận" />}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              imagePickerHelper(res => {
-                setImages(images.concat(res));
-              });
-            }}
-            style={{
-              height: "10%",
-              backgroundColor: colors.primary,
-              margin: 15,
-              borderRadius: 10,
-              justifyContent: "center"
-            }}
+
+          <View
+            style={{ flexDirection: "row", marginVertical: 30 }}
             children={
-              <WText style={{ textAlign: "center" }} children="Ảnh nhân viên" />
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    imagePickerHelper(res => {
+                      setImages(images.concat(res));
+                    });
+                  }}
+                  style={{
+                    height: width / 3.5,
+                    aspectRatio: 1,
+                    backgroundColor: colors.primary,
+                    margin: 5,
+                    borderRadius: 10,
+                    justifyContent: "center",
+                    alignSelf: "center"
+                  }}
+                  children={
+                    <WText
+                      style={{ textAlign: "center" }}
+                      children="Thêm ảnh"
+                    />
+                  }
+                />
+                <FlatList
+                  data={images.reverse()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item, index) => `${index}`}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      onPress={() => {}}
+                      style={{
+                        height: width / 3,
+                        margin: 5,
+                        borderRadius: 10
+                      }}
+                      children={
+                        <FastImg
+                          resizeMode="cover"
+                          style={{
+                            width: width / 3,
+                            aspectRatio: 1,
+                            borderRadius: 10
+                          }}
+                          source={{ uri: item }}
+                        />
+                      }
+                    />
+                  )}
+                />
+              </>
             }
           />
-          <ScrollView
-            children={images.map((e, i) => (
-              <TouchableOpacity
-                key={i}
-                onPress={() => {}}
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.primary,
+              padding: 15,
+              alignSelf: "center",
+              borderRadius: 5
+            }}
+            children={
+              <WText
                 style={{
-                  // height: "35%",
-                  backgroundColor: colors.primary,
-                  margin: 10,
-                  borderRadius: 10
-                  // justifyContent: "center"
-                  // width: "100%"
+                  paddingHorizontal: 15
                 }}
-                children={
-                  <FastImg
-                    style={{
-                      width: "100%",
-                      height: height / 5,
-                      alignSelf: "center",
-                      overflow: "hidden"
-                    }}
-                    source={{ uri: e }}
-                  />
-                }
+                children="Xác nhận"
               />
-            ))}
+            }
           />
         </>
       }
