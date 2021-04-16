@@ -24,8 +24,6 @@ def upload_predict(image, le, clf):
         names = result
         if not names:
             return on_fail(message='Không tìm thấy đối tượng.', status=400)
-        if len(names) > 1:
-            return on_fail(message='Lỗi! Có nhiều người trong ảnh.', status=400)
         print(" | Result: ", names)
 
         # convert data to json
