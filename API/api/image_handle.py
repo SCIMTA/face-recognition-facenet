@@ -13,7 +13,8 @@ def upload_person(name, images):
         print("{} | with label '{}'".format(path,name))
         return on_success()
     except Exception as err:
-        return on_fail(message=err)
+        print(err)
+        return on_fail()
 
 def upload_predict(image, le, clf):
     try:
@@ -31,4 +32,5 @@ def upload_predict(image, le, clf):
         data = pd.DataFrame(result, columns={'label'}).to_dict(orient='records')
         return on_success(data=data, message='Thành công.', status=200)
     except Exception as err:
-        return on_fail(message=err)
+        print(err)
+        return on_fail()
