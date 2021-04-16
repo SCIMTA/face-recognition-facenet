@@ -162,7 +162,7 @@ def predict_multiple_per(le, clf, pred_filepaths, margin=10):
             # pass
         else:
             img = cv2.imread(filepath)
-            people.append(['None', "OriginalImage"])
+            # people.append(['None', "OriginalImage"])
             faces = cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=3)
             # print(faces)
             for face in faces:
@@ -176,13 +176,13 @@ def predict_multiple_per(le, clf, pred_filepaths, margin=10):
                 # print(len(aligned_images))
                 emb = calc_embs_per(np.array(aligned_images))
                 pred = le.inverse_transform(clf.predict(emb))
-                img_base64 = image_to_base64(aligned*255)
-                people.append([img_base64, pred[0]])       # we need return every person
+                # img_base64 = image_to_base64(aligned*255)
+                people.append(pred[0])       # we need return every person
                 # print(pred)
-                name = pred[0]
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
-                cv2.putText(img, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
-            people[0][0] = image_to_base64(img)
+                # name = pred[0]
+                # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                # cv2.putText(img, name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+            # people[0][0] = image_to_base64(img)
             # print(img)
             # return img
     # print("data to return", people)
