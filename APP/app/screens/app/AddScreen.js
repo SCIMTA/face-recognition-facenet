@@ -12,79 +12,101 @@ import InputText from "@app/components/InputText";
 import R from "@app/assets/R";
 import imagePickerHelper from "@app/utils/ImagePickerHelper";
 import FastImg from "@app/components/FastImage";
-import { ScrollView } from "react-native";
+import { upload_person } from "@api";
 import { FlatList } from "react-native";
+import reactotron from "@app/reactotron/ReactotronConfig";
+import NavigationUtil from "@app/navigation/NavigationUtil";
+import { SCREEN_ROUTER_APP } from "@app/constants/Constant";
+import { showMessages } from "@app/utils/AlertHelper";
 
 const AddScreen = props => {
   const [images, setImages] = useState([]);
+  const [name, setName] = useState("");
+  const callApiAddPerson = () => {
+    callAPIHook({
+      API: upload_person,
+      formdata: {
+        name,
+        files: images
+          .filter(e => !!e)
+          .map((e, i) => ({
+            uri: e,
+            name: e.split("/").pop(),
+            type: "image/jpeg",
+            filename: new Date().getTime() + `_${i}.jpeg`
+          }))
+      },
+      onSuccess: res => {
+        showMessages("", "Đã thêm " + name);
+        NavigationUtil.navigate(SCREEN_ROUTER_APP.MAIN);
+      },
+      onError: err => {
+        console.log(err);
+      }
+    });
+  };
 
   useEffect(() => {}, []);
 
+  reactotron.log(images);
   return (
     <ScreenComponent
       back
       titleHeader="Thêm"
       renderView={
         <>
-          <InputText icon={R.images.ic_user} placeholder="Tên nhân viên" />
+          <InputText
+            value={name}
+            onChangeText={setName}
+            icon={R.images.ic_user}
+            placeholder="Tên nhân viên"
+          />
 
           <View
-            style={{ flexDirection: "row", marginVertical: 30 }}
-            children={
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    imagePickerHelper(res => {
-                      setImages(images.concat(res));
-                    });
-                  }}
-                  style={{
-                    height: width / 3.5,
-                    aspectRatio: 1,
-                    backgroundColor: colors.primary,
-                    margin: 5,
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    alignSelf: "center"
-                  }}
-                  children={
-                    <WText
-                      style={{ textAlign: "center" }}
-                      children="Thêm ảnh"
-                    />
-                  }
-                />
-                <FlatList
-                  data={images.reverse()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  keyExtractor={(item, index) => `${index}`}
-                  renderItem={({ item, index }) => (
-                    <TouchableOpacity
-                      onPress={() => {}}
-                      style={{
-                        height: width / 3,
-                        margin: 5,
-                        borderRadius: 10
-                      }}
-                      children={
-                        <FastImg
-                          resizeMode="cover"
-                          style={{
-                            width: width / 3,
-                            aspectRatio: 1,
-                            borderRadius: 10
-                          }}
-                          source={{ uri: item }}
-                        />
-                      }
-                    />
-                  )}
-                />
-              </>
-            }
+            style={{ marginVertical: 30 }}
+            children={[1, 4].map((e, i) => (
+              <View
+                key={i}
+                style={{ flexDirection: "row" }}
+                children={[0, 1, 2].map((r, j) => (
+                  <TouchableOpacity
+                    key={j}
+                    onPress={() => {
+                      imagePickerHelper(res => {
+                        images[e + r] = res;
+                        setImages([...images]);
+                      });
+                    }}
+                    style={{
+                      margin: 5,
+                      borderRadius: 10,
+                      borderWidth: 0.5,
+                      flex: 1,
+                      borderColor: colors.primary
+                    }}
+                    children={
+                      <FastImg
+                        resizeMode={!images[e + r] ? "center" : "cover"}
+                        style={{
+                          aspectRatio: 1,
+                          borderRadius: 10
+                        }}
+                        tintColor={!images[e + r] ? colors.primary : null}
+                        source={
+                          !images[e + r]
+                            ? R.images.ic_face
+                            : { uri: images[e + r] }
+                        }
+                      />
+                    }
+                  />
+                ))}
+              />
+            ))}
           />
+
           <TouchableOpacity
+            onPress={callApiAddPerson}
             style={{
               backgroundColor: colors.primary,
               padding: 15,
@@ -94,8 +116,9 @@ const AddScreen = props => {
             children={
               <WText
                 style={{
-                  paddingHorizontal: 15
+                  paddingHorizontal: 30
                 }}
+                color={colors.white}
                 children="Xác nhận"
               />
             }

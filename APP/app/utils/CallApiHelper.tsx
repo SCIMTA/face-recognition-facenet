@@ -69,8 +69,13 @@ export async function callAPIHook({
   const data = new FormData();
   try {
     Object.keys(formdata).forEach(key => {
-      data.append(key, formdata[key]);
+      if (Array.isArray(formdata[key])) {
+        formdata[key].forEach(element => {
+          data.append(key, element);
+        });
+      } else data.append(key, formdata[key]);
     });
+    // console.log(data);
   } catch (error) {}
   if (payload == null || payload == undefined) payload = data;
   if (useLoading)

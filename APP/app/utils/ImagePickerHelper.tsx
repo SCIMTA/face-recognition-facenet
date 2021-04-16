@@ -92,7 +92,7 @@ const _resizeImage = async (uri, actualWidth, actualHeight, res) => {
       30
       // 0
     );
-    console.log("resize success");
+    // console.log("resize success");
     url = response.uri;
   } catch (error) {
     console.log("resize err: " + error);
