@@ -6,11 +6,12 @@ const { AsyncStorage } = require("react-native");
 
 const createAPI = () => {
   const APIInstant = require("axios").default.create();
-  APIInstant.defaults.baseURL = "http://128.199.108.177:8000/";
+  APIInstant.defaults.baseURL = "http://128.199.108.177:8002/";
   APIInstant.defaults.timeout = 20000;
-  APIInstant.defaults.headers = { "Content-Type": "application/json" };
-  APIInstant.interceptors.request.use(async config => {
-    config.headers.token = await AsyncStorage.getItem("token");
+  APIInstant.defaults.headers = {
+    "Content-Type": "application/json"
+  };
+  APIInstant.interceptors.request.use(config => {
     return config;
   }, Promise.reject);
 
@@ -43,5 +44,12 @@ const handleResult = api =>
 
 module.exports = {
   login: payload => handleResult(getAPI.post(`login`, payload)),
-  logOut: () => handleResult(getAPI.get(`logout`))
+  upload_person: payload =>
+    handleResult(
+      getAPI.post(`upload_person`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+    )
 };
