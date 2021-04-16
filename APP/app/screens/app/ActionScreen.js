@@ -13,13 +13,14 @@ import R from "@app/assets/R";
 import FastImg from "@app/components/FastImage";
 import { RNCamera, FaceDetector } from "react-native-camera";
 import { useRef } from "react";
+import { upload_predict } from "@app/constants/Api";
+import reactotron from "@app/reactotron/ReactotronConfig";
 let timeOut = null;
+let isCallApiPredictDone = true;
 const ActionScreen = props => {
   const [faces, setFaces] = useState([]);
   const camera = useRef(null);
-  useEffect(() => {
-    // console.log(camera.current);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <ScreenComponent
@@ -34,7 +35,33 @@ const ActionScreen = props => {
             onFacesDetected={res => {
               if (timeOut) clearTimeout(timeOut);
               setFaces(res.faces);
-              console.log("face_detect");
+              // console.log("face_detect");
+              if (isCallApiPredictDone) {
+                isCallApiPredictDone = false;
+                camera.current.takePictureAsync({ width: 600 }).then(res => {
+                  const uri = res.uri;
+                  callAPIHook({
+                    API: upload_predict,
+                    formdata: {
+                      file: {
+                        uri: uri,
+                        name: uri.split("/").pop(),
+                        type: "image/jpeg",
+                        filename: new Date().getTime() + `.jpeg`
+                      }
+                    },
+                    onSuccess: res => {
+                      console.log(res);
+                    },
+                    onError: err => {
+                      console.log(err);
+                    },
+                    onFinaly: () => {
+                      isCallApiPredictDone = true;
+                    }
+                  });
+                });
+              }
               timeOut = setTimeout(() => {
                 setFaces([]);
               }, 500);

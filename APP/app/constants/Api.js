@@ -35,7 +35,7 @@ const handleResult = api =>
         });
       });
     }
-    if (res.data.status != 1) {
+    if (res.data.status == 0) {
       showMessages(R.strings().notification, res.data.message);
       return Promise.reject(res.data.message);
     }
@@ -44,12 +44,7 @@ const handleResult = api =>
 
 module.exports = {
   login: payload => handleResult(getAPI.post(`login`, payload)),
-  upload_person: payload =>
-    handleResult(
-      getAPI.post(`upload_person`, payload, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
-    )
+  upload_person: payload => handleResult(getAPI.post(`upload_person`, payload)),
+  upload_predict: payload =>
+    handleResult(getAPI.post(`upload_predict`, payload))
 };
