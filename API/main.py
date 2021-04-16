@@ -20,8 +20,18 @@ print("Model loaded")
 
 @app.post("/upload_person")
 async def _upload_person(name: str = Form(...),
-                         files: List[UploadFile] = File(...)):
-    return upload_person(name, files)
+                         files: List[UploadFile] = File(...),
+                         train_option: int = Form(...)):
+    message = upload_person(name, files)
+    if (train_option != 0):
+        try:
+            re_train()
+            reload_model()
+        except Exception as err:
+            print(err)
+            return on_fail()
+    return message
+
 
 @app.post("/upload_predict")
 async def _upload_predict(file: UploadFile = File(...)):
