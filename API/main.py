@@ -18,18 +18,12 @@ print(le.classes_)
 print("Model loaded")
 
 
-@app.post("/upload_person/")
+@app.post("/upload_person")
 async def _upload_person(name: str = Form(...),
-                         file1: UploadFile = File(...),
-                         file2: UploadFile = File(...),
-                         file3: UploadFile = File(...),
-                         file4: UploadFile = File(...),
-                         file5: UploadFile = File(...),
-                         file6: UploadFile = File(...)):
-    files = [file1, file2, file3, file4, file5, file6]
+                         files: List[UploadFile] = File(...)):
     return upload_person(name, files)
 
-@app.post("/upload_predict/")
+@app.post("/upload_predict")
 async def _upload_predict(file: UploadFile = File(...)):
     return upload_predict(file, le, clf)
 
