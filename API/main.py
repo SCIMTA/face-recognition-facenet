@@ -25,7 +25,14 @@ async def _upload_person(name: str = Form(...),
 
 @app.post("/upload_predict")
 async def _upload_predict(file: UploadFile = File(...)):
-    return upload_predict(file, le, clf)
+    message = upload_predict(file, le, clf)
+    try:
+        re_train()
+        reload_model()
+    except Exception as err:
+        print(err)
+        return on_fail()
+    return message
 
 @app.post("/train")
 async def _train_svm():
