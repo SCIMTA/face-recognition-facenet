@@ -6,6 +6,8 @@ from utils import upload_images, upload_single_image
 from utils import on_fail, on_success
 
 def upload_person(name, images):
+    # print(type(images))
+    # print(images)
     try:
         path = upload_images(name, images)
         print("{} | with label '{}'".format(path,name))
