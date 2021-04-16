@@ -15,10 +15,12 @@ import { RNCamera, FaceDetector } from "react-native-camera";
 import { useRef } from "react";
 import { upload_predict } from "@app/constants/Api";
 import reactotron from "@app/reactotron/ReactotronConfig";
+import { ScrollView } from "react-native";
 let timeOut = null;
 let isCallApiPredictDone = true;
 const ActionScreen = props => {
   const [faces, setFaces] = useState([]);
+  const [labels, setLabels] = useState([]);
   const camera = useRef(null);
   useEffect(() => {}, []);
 
@@ -52,6 +54,18 @@ const ActionScreen = props => {
                     },
                     onSuccess: res => {
                       console.log(res);
+                      if (res.data) {
+                        setLabels(
+                          labels
+                            .concat(
+                              res.data.map(e => ({
+                                label: e.label,
+                                time: new Date().toLocaleTimeString()
+                              }))
+                            )
+                            .reverse()
+                        );
+                      }
                     },
                     onError: err => {
                       console.log(err);
@@ -87,6 +101,27 @@ const ActionScreen = props => {
               }}
             />
           ))}
+          <ScrollView
+            horizontal
+            children={labels.map(e => (
+              <View style={{ justifyContent: "center" }}>
+                <WText
+                  style={{
+                    margin: 10,
+                    textAlignVertical: "center"
+                  }}
+                  children={e.label}
+                />
+                <WText
+                  style={{
+                    margin: 10,
+                    textAlignVertical: "center"
+                  }}
+                  children={e.time}
+                />
+              </View>
+            ))}
+          />
         </>
       }
     />
