@@ -32,9 +32,10 @@ async def _train_svm():
     try:
         re_train()
         reload_model()
-        return on_success()
+        return on_success(message="Train success!")
     except Exception as err:
-        return on_fail(message=err)
+        print(err)
+        return on_fail()
 
 def reload_model():
     global clf
