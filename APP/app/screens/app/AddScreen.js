@@ -34,7 +34,8 @@ const AddScreen = props => {
             name: e.split("/").pop(),
             type: "image/jpeg",
             filename: new Date().getTime() + `_${i}.jpeg`
-          }))
+          })),
+        train_option: 1
       },
       onSuccess: res => {
         showMessages("", "Đã thêm " + name);
