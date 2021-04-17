@@ -4,6 +4,7 @@ from typing import Optional, List
 from joblib import dump, load
 from fastapi import FastAPI, Header, Form, UploadFile, File
 from api.image_handle import upload_person, upload_predict
+from api.export_report import export_day_report, export_month_report
 from utils import on_fail, on_success
 
 app = FastAPI(docs_url="/chongtromcaponline", redoc_url=None)
@@ -32,10 +33,20 @@ async def _upload_person(name: str = Form(...),
             return on_fail()
     return message
 
-
 @app.post("/upload_predict")
 async def _upload_predict(file: UploadFile = File(...)):
     return upload_predict(file, le, clf)
+
+@app.get("/export_day_report")
+async def _export_day_report(day: int,
+                             month: int,
+                             year:int):
+    return export_day_report(day, month, year)
+
+@app.get("/export_month_report")
+async def _export_month_report(month: int,
+                               year:int):
+    return export_month_report(month, year)
 
 @app.post("/train")
 async def _train_svm():
