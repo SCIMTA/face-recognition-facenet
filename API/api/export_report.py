@@ -4,17 +4,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from utils import on_fail, get_file
-# from core.face_recog_SVM import get_label
 
-
-from sklearn.preprocessing import LabelEncoder
-
-def get_label():            #debug only
-    le = LabelEncoder()
-    le.classes_ = np.load('../core/model/svc/label_final.npy')
-    return le
-
-def check_face(names):
+def check_face(le, names):
     # time: 2017-12-16 03:02:35.500000
     now = datetime.now()
     year = str(now.strftime("%Y"))
@@ -25,8 +16,6 @@ def check_face(names):
     gio_di_lam = pd.Timestamp("08:30:00")
     # gio_ve < gio_tan_lam -> ve som
     gio_tan_lam = pd.Timestamp("17:00:00")
-    # fix this
-    le = get_label()
 
     # print(year, month, day)
     folder_path = "report/{}/{}".format(year, month)

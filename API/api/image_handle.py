@@ -28,7 +28,7 @@ def upload_predict(image, le, clf):
         if not names:
             return on_fail(message='Không tìm thấy đối tượng.', status=400)
         print(" | Result: ", names)
-        check_face(names)
+        check_face(le, names)
         # convert data to json
         data = pd.DataFrame(result, columns={'label'}).to_dict(orient='records')
         return on_success(data=data, message='Thành công.', status=200)
