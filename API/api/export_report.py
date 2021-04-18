@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from utils import on_fail, get_file
+from core.face_recog_SVM import get_label
 
 def check_face(le, names):
     # time: 2017-12-16 03:02:35.500000
