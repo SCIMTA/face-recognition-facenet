@@ -13,6 +13,7 @@ import { SCREEN_ROUTER_APP } from "@app/constants/Constant";
 import ModalView from "@app/components/ModalView";
 import { ScrollView } from "react-native";
 import { export_month_report } from "@app/constants/Api";
+import { Linking } from "react-native";
 
 let fullMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const MainScreen = props => {
@@ -38,16 +39,20 @@ const MainScreen = props => {
     }
   ];
   const callApiExportExcel = () => {
-    callAPIHook({
-      API: export_month_report,
-      payload: {
-        month,
-        year
-      },
-      onSuccess: res => {
-        setVisible(false);
-      }
-    });
+    Linking.openURL(
+      `http://128.199.108.177:8002/export_month_report?month=${month}&year=${year}`
+    );
+    // callAPIHook({
+    //   API: export_month_report,
+    //   payload: {
+    //     month,
+    //     year
+    //   },
+    //   onSuccess: res => {
+    //     console.log(res);
+    //     setVisible(false);
+    //   }
+    // });
   };
   return (
     <ScreenComponent

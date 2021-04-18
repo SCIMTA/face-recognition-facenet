@@ -34,12 +34,14 @@ export default class ModalView extends PureComponent<Props> {
     const { setClose } = this.props;
     return (
       <TouchableOpacity
-        onPress={setClose}
+        onPress={() => {
+          if (setClose) setClose(false);
+        }}
         style={{ position: "absolute", top: 5, right: 5, zIndex: 15 }}
         children={
           <FastImg
-            style={{ width: 40, height: 40 }}
-            source={R.images.ic_close_rec}
+            style={{ width: 30, height: 30 }}
+            source={R.images.ic_close}
             tintColor={"tomato"}
           />
         }
