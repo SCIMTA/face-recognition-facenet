@@ -75,7 +75,7 @@ def generate_month_report(month, year):
             df[str(date[:2])] = df_date['Trạng thái']
 
     # create some param to evaluate employe
-    so_ngay_tong = len(df.iloc[0]) - 4
+    so_ngay_tong = len(df.iloc[0]) - 5
     df['Số ngày muộn'] = 0
     df['Số ngày về sớm'] = 0
     df['Số ngày vắng'] = 0
