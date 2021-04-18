@@ -10,8 +10,15 @@ import WText from "@app/components/WText";
 import { colors } from "@app/constants/Theme";
 import NavigationUtil from "@app/navigation/NavigationUtil";
 import { SCREEN_ROUTER_APP } from "@app/constants/Constant";
+import ModalView from "@app/components/ModalView";
+import { ScrollView } from "react-native";
+import { export_month_report } from "@app/constants/Api";
 
+let fullMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const MainScreen = props => {
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [visible, setVisible] = useState(false);
   useEffect(() => {}, []);
 
   const button = [
@@ -25,14 +32,153 @@ const MainScreen = props => {
     },
     {
       title: "Xuất excel",
-      onPress: () => {}
+      onPress: () => {
+        setVisible(true);
+      }
     }
   ];
+  const callApiExportExcel = () => {
+    callAPIHook({
+      API: export_month_report,
+      payload: {
+        month,
+        year
+      },
+      onSuccess: res => {
+        setVisible(false);
+      }
+    });
+  };
   return (
     <ScreenComponent
       titleHeader="ATT"
       renderView={
         <>
+          <ModalView
+            setClose={setVisible}
+            isVisible={visible}
+            contentStyle={{ borderRadius: 10 }}
+            contentView={
+              <>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    marginVertical: 20
+                  }}
+                  children={
+                    <>
+                      <View
+                        children={
+                          <>
+                            <WText font="regular16" children="Chọn tháng" />
+                            <ScrollView
+                              style={{ height: 300, marginVertical: 15 }}
+                              children={fullMonth.map(e => (
+                                <TouchableOpacity
+                                  style={{
+                                    alignSelf: "center"
+                                  }}
+                                  onPress={() => {
+                                    setMonth(e);
+                                  }}
+                                  key={e}
+                                  children={
+                                    <WText
+                                      style={{
+                                        textAlign: "center",
+                                        textAlignVertical: "center",
+                                        marginVertical: 8,
+                                        borderWidth: 1,
+                                        borderRadius: 60,
+                                        width: 30,
+                                        aspectRatio: 1,
+                                        color:
+                                          month == e
+                                            ? colors.white
+                                            : colors.primary,
+                                        backgroundColor:
+                                          month == e ? colors.primary : "white",
+                                        borderColor: colors.primary
+                                      }}
+                                      children={e}
+                                    />
+                                  }
+                                />
+                              ))}
+                            />
+                          </>
+                        }
+                      />
+                      <View
+                        children={
+                          <>
+                            <WText font="regular16" children="Chọn năm" />
+                            <ScrollView
+                              style={{ height: 300, marginVertical: 15 }}
+                              children={fullMonth
+                                .map(val => new Date().getFullYear() - val + 1)
+                                .map(e => (
+                                  <TouchableOpacity
+                                    style={{
+                                      alignSelf: "center"
+                                    }}
+                                    onPress={() => {
+                                      setYear(e);
+                                    }}
+                                    key={e}
+                                    children={
+                                      <WText
+                                        style={{
+                                          textAlign: "center",
+                                          textAlignVertical: "center",
+                                          marginVertical: 8,
+                                          borderWidth: 1,
+                                          borderRadius: 5,
+                                          paddingHorizontal: 15,
+                                          paddingVertical: 5,
+                                          color:
+                                            year == e
+                                              ? colors.white
+                                              : colors.primary,
+                                          backgroundColor:
+                                            year == e
+                                              ? colors.primary
+                                              : "white",
+                                          borderColor: colors.primary
+                                        }}
+                                        children={e}
+                                      />
+                                    }
+                                  />
+                                ))}
+                            />
+                          </>
+                        }
+                      />
+                    </>
+                  }
+                />
+                <TouchableOpacity
+                  onPress={callApiExportExcel}
+                  children={
+                    <WText
+                      style={{
+                        backgroundColor: colors.primary,
+                        padding: 15,
+                        alignSelf: "center",
+                        marginBottom: 15,
+                        borderRadius: 5
+                      }}
+                      color={colors.white}
+                      font="regular16"
+                      children="Xuất file"
+                    />
+                  }
+                />
+              </>
+            }
+          />
           {button.map(value => (
             <TouchableOpacity
               key={value.title}
