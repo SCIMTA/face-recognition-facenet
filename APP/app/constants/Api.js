@@ -45,6 +45,15 @@ const handleResult = api =>
 module.exports = {
   login: payload => handleResult(getAPI.post(`login`, payload)),
   upload_person: payload => handleResult(getAPI.post(`upload_person`, payload)),
+  export_month_report: ({
+    month = new Date().getMonth() + 1,
+    year = new Date().getFullYear()
+  }) =>
+    handleResult(
+      getAPI.get(`export_month_report`, {
+        params: { month, year }
+      })
+    ),
   upload_predict: payload =>
     handleResult(getAPI.post(`upload_predict`, payload))
 };

@@ -19,7 +19,7 @@ interface Props {
   isVisible: boolean;
   backdrop?: boolean;
   hideCloseButton?: boolean;
-  setClose: () => void;
+  setClose: (boolean) => void;
   onModalHide?: () => void;
   contentView: React.ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
@@ -64,7 +64,7 @@ export default class ModalView extends PureComponent<Props> {
         }}
         isVisible={isVisible}
         onBackdropPress={() => {
-          if (backdrop) setClose();
+          if (backdrop) setClose(false);
         }}
         backdropColor={"rgba(0,0,0,0.8)"}
         backdropOpacity={0.8}
