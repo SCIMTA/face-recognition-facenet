@@ -7,6 +7,7 @@ import shutil
 from datetime import datetime
 from hashlib import sha256 as sh
 from hashlib import md5
+from fastapi.responses import FileResponse
 
 def on_success(data=None, message='Thành công', status=1):
     if data is not None:
@@ -103,3 +104,6 @@ def upload_single_image(image):
 def image_to_base64(image):
     string = base64.b64encode(cv2.imencode('.jpg', image)[1]).decode()
     return string
+
+def get_file(file_uri):
+    return FileResponse(file_uri)
