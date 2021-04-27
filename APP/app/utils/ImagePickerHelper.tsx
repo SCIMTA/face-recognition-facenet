@@ -52,22 +52,22 @@ const startPickImage = res => {
       } else {
         var actualWidth = response.width,
           actualHeight = response.height;
-        var imgRatio = actualWidth / actualHeight;
-        var maxRatio = maxHeight / maxHeight;
-        if (actualHeight > maxHeight || actualWidth > maxWidth) {
-          if (imgRatio < maxRatio) {
-            imgRatio = maxHeight / actualHeight;
-            actualWidth = imgRatio * actualWidth;
-            actualHeight = maxHeight;
-          } else if (imgRatio > maxRatio) {
-            imgRatio = maxWidth / actualWidth;
-            actualHeight = imgRatio * actualHeight;
-            actualWidth = maxWidth;
-          } else {
-            actualHeight = maxHeight;
-            actualWidth = maxWidth;
-          }
-        }
+        // var imgRatio = actualWidth / actualHeight;
+        // var maxRatio = maxHeight / maxHeight;
+        // if (actualHeight > maxHeight || actualWidth > maxWidth) {
+        //   if (imgRatio < maxRatio) {
+        //     imgRatio = maxHeight / actualHeight;
+        //     actualWidth = imgRatio * actualWidth;
+        //     actualHeight = maxHeight;
+        //   } else if (imgRatio > maxRatio) {
+        //     imgRatio = maxWidth / actualWidth;
+        //     actualHeight = imgRatio * actualHeight;
+        //     actualWidth = maxWidth;
+        //   } else {
+        //     actualHeight = maxHeight;
+        //     actualWidth = maxWidth;
+        //   }
+        // }
 
         var uri =
           Platform.OS === "android"
@@ -89,7 +89,7 @@ const _resizeImage = async (uri, actualWidth, actualHeight, res) => {
       actualWidth,
       actualHeight,
       "JPEG",
-      30,
+      60,
       0
     );
     // console.log("resize success");
