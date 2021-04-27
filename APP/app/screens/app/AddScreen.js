@@ -22,9 +22,12 @@ import { showMessages } from "@app/utils/AlertHelper";
 const AddScreen = props => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
   const callApiAddPerson = () => {
     callAPIHook({
       API: upload_person,
+      useLoading: setLoading,
       formdata: {
         name,
         files: images
@@ -52,6 +55,7 @@ const AddScreen = props => {
   reactotron.log(images);
   return (
     <ScreenComponent
+      dialogLoading={isLoading}
       back
       titleHeader="Thêm"
       renderView={
