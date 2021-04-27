@@ -66,11 +66,9 @@ def upload_images(name, images):
     # print(folder)                         #debug only
     image_folder_path_root = os.getcwd() + "/core/data/images"
     image_folder_path_person = image_folder_path_root + "/" + folder
-    if not os.path.exists(os.getcwd() + "/core/data/"):
-        os.mkdir(os.getcwd() + "/core/data/")
     if not os.path.exists(image_folder_path_root):
         print("Root folder not found, maybe server is hacked! But we're creating...")
-        os.mkdir(image_folder_path_root)
+        os.makedirs(image_folder_path_root)
     if not os.path.exists(image_folder_path_person):
         os.mkdir(image_folder_path_person)
     for image in images:
