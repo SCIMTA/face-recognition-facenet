@@ -33,6 +33,7 @@ def prewhiten(x):
     else:
         raise ValueError('Dimension should be 3 or 4')
 
+
     mean = np.mean(x, axis=axis, keepdims=True)
     std = np.std(x, axis=axis, keepdims=True)
     std_adj = np.maximum(std, 1.0/np.sqrt(size))
@@ -47,13 +48,14 @@ def load_and_align_images(filepaths, margin):
     cascade = cv2.CascadeClassifier(cascade_path)
 
     aligned_images = []
+    print(filepaths)
     for filepath in filepaths:
         print(filepath)
         img = cv2.imread(filepath)
         # print(img.shape)
         faces = cascade.detectMultiScale(img,
-                                         scaleFactor=1.1,
-                                         minNeighbors=3)
+                                         scaleFactor=1.2,
+                                         minNeighbors=5)
         if len(faces) == 0:
             os.remove(filepath)
             print("face not found, file removed")
@@ -65,6 +67,7 @@ def load_and_align_images(filepaths, margin):
             aligned = resize(cropped, (image_size, image_size), mode='reflect')
             # print(aligned.shape) 
             aligned_images.append(aligned)
+            # print(len(aligned_images))
     return np.array(aligned_images)
 
 def calc_embs(filepaths, margin=10, batch_size=1):
@@ -80,12 +83,19 @@ def train(dir_basepath, names, max_num_img=10):
     embs = []
     for name in names:
         dirpath = os.path.abspath(dir_basepath + name)
+        print(dirpath)
         filepaths = [os.path.join(dirpath, f) for f in os.listdir(dirpath)][:max_num_img]
-        embs_ = calc_embs(filepaths)
-        print(embs_.shape)
-        # print(filepaths)
-        labels.extend([name] * len(embs_))
-        embs.append(embs_)
+        try:
+            embs_ = calc_embs(filepaths)
+            print(embs_.shape)
+            # print(filepaths)
+            labels.extend([name] * len(embs_))
+            embs.append(embs_)
+        except Exception as err:
+            os.removedirs(dirpath)
+            print("Cannot detect face, removed person please upload other!")
+            pass
+
 
     embs = np.concatenate(embs)
     le = LabelEncoder().fit(labels)

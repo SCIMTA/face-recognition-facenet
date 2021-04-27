@@ -3,5 +3,7 @@ scikit-image
 sklearn
 keras
 tensorflow==2.4.1
+tensorflow-gpu==2.4.1
 pandas
 opencv-python
+python-multipart

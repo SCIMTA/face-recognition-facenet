@@ -62,7 +62,7 @@ def remove_bad_char(text):
 def upload_images(name, images):
     # seed = "gC&!`Ud~?,K'7\\G"         #we need other encrypt method
     datetime_now = str(datetime.now().strftime("%m%d%Y_%H%M%S"))
-    folder = name.replace(" ", "_")
+    folder = un_unicode(name.replace(" ", "_"))
     # print(folder)                         #debug only
     image_folder_path_root = os.getcwd() + "/core/data/images"
     image_folder_path_person = image_folder_path_root + "/" + folder
