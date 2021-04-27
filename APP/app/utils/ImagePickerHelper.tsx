@@ -1,11 +1,8 @@
-import ImagePicker from "react-native-image-picker";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import ImageResizer from "react-native-image-resizer";
-import { Dimensions, Platform, PermissionsAndroid } from "react-native";
-import { colors } from "@app/constants/Theme";
-const maxWidth = Dimensions.get("screen").width;
-const maxHeight = Dimensions.get("screen").height;
+import { Platform, PermissionsAndroid } from "react-native";
 
-const imagePickerHelper = async res => {
+const imagePickerHelper = async (res, numPic = 1) => {
   if (Platform.OS != "ios") {
     const isRead = await PermissionsAndroid.check(
       "android.permission.READ_EXTERNAL_STORAGE"
@@ -16,90 +13,86 @@ const imagePickerHelper = async res => {
     const isGrantCamera = await PermissionsAndroid.check(
       "android.permission.CAMERA"
     );
-    if (isRead && isWrite && isGrantCamera) startPickImage(res);
-    else {
+    if (isRead && isWrite && isGrantCamera) {
+      startPickImage(result => {
+        if (res) res(result);
+      }, numPic);
+    } else {
       PermissionsAndroid.requestMultiple([
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.CAMERA"
       ]).finally(() => {
-        imagePickerHelper(res);
+        imagePickerHelper(res, numPic);
       });
     }
-  } else startPickImage(res);
-};
-
-const startPickImage = res => {
-  const options = {
-    title: "Chọn",
-    cancelButtonTitle: "Hủy",
-    chooseFromLibraryButtonTitle: "Chọn ảnh từ thư viện",
-    takePhotoButtonTitle: "Chụp ảnh",
-    storageOptions: {
-      skipBackup: true,
-      path: "images"
-    },
-    tintColor: colors.headerColor
-  };
-  try {
-    ImagePicker.showImagePicker(options, async response => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else if (response.customButton) {
-        console.log("User tapped custom button: ", response.customButton);
-      } else {
-        var actualWidth = response.width,
-          actualHeight = response.height;
-        // var imgRatio = actualWidth / actualHeight;
-        // var maxRatio = maxHeight / maxHeight;
-        // if (actualHeight > maxHeight || actualWidth > maxWidth) {
-        //   if (imgRatio < maxRatio) {
-        //     imgRatio = maxHeight / actualHeight;
-        //     actualWidth = imgRatio * actualWidth;
-        //     actualHeight = maxHeight;
-        //   } else if (imgRatio > maxRatio) {
-        //     imgRatio = maxWidth / actualWidth;
-        //     actualHeight = imgRatio * actualHeight;
-        //     actualWidth = maxWidth;
-        //   } else {
-        //     actualHeight = maxHeight;
-        //     actualWidth = maxWidth;
-        //   }
-        // }
-
-        var uri =
-          Platform.OS === "android"
-            ? response.uri
-            : response.uri.replace("file://", "");
-        await _resizeImage(uri, actualWidth, actualHeight, res);
-      }
-    });
-  } catch (error) {
-    console.log("select image err: " + JSON.stringify(error));
+  } else {
+    startPickImage(result => {
+      if (res) res(result);
+    }, numPic);
   }
 };
 
-const _resizeImage = async (uri, actualWidth, actualHeight, res) => {
+const startPickImage = (res, numPic, i = 0, list_res = []) => {
+  if (numPic == i && res) {
+    res(list_res);
+    return;
+  }
+  try {
+    launchCamera(
+      {
+        maxWidth: 800,
+        maxHeight: 800,
+        mediaType: "photo",
+        cameraType: "front",
+        includeBase64: false,
+        saveToPhotos: false
+      },
+      async response => {
+        if (response.didCancel) {
+          console.log("User cancelled image picker");
+        } else if (response.errorMessage) {
+          console.log("ImagePicker Error: ", response.errorMessage);
+        } else {
+          var actualWidth = response.width,
+            actualHeight = response.height;
+
+          var uri =
+            Platform.OS === "android"
+              ? response.uri
+              : response.uri.replace("file://", "");
+          // return await _resizeImage(uri);
+          return startPickImage(res, numPic, i + 1, list_res.concat(uri));
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
+};
+
+const _resizeImage = async uri => {
   var url = null;
   try {
-    const response = await ImageResizer.createResizedImage(
-      uri,
-      actualWidth,
-      actualHeight,
-      "JPEG",
-      60,
-      0
-    );
+    // const response = await ImageResizer.createResizedImage(
+    //   uri,
+    //   actualWidth,
+    //   actualHeight,
+    //   "JPEG",
+    //   60,
+    //   270 + 90
+    // );
     // console.log("resize success");
-    url = response.uri;
+    // url = response.uri;
+    url = uri;
   } catch (error) {
     console.log("resize err: " + error);
     url = uri;
   }
   url = Platform.OS === "ios" ? url.replace("file://", "") : url;
-  if (typeof res) res(url);
+  // if (typeof res) res(url);
+  return url;
 };
 
 export default imagePickerHelper;

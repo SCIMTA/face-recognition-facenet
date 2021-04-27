@@ -38,7 +38,9 @@ class App extends Component {
 }
 
 const MyApp = codePush({
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  checkFrequency: __DEV__
+    ? codePush.CheckFrequency.MANUAL
+    : codePush.CheckFrequency.ON_APP_START,
   installMode: codePush.InstallMode.IMMEDIATE
 })(App);
 

@@ -51,8 +51,6 @@ const AddScreen = props => {
   };
 
   useEffect(() => {}, []);
-
-  reactotron.log(images);
   return (
     <ScreenComponent
       dialogLoading={isLoading}
@@ -69,7 +67,7 @@ const AddScreen = props => {
 
           <View
             style={{ marginVertical: 30 }}
-            children={[1, 4].map((e, i) => (
+            children={[0, 3].map((e, i) => (
               <View
                 key={i}
                 style={{ flexDirection: "row" }}
@@ -77,10 +75,7 @@ const AddScreen = props => {
                   <TouchableOpacity
                     key={j}
                     onPress={() => {
-                      imagePickerHelper(res => {
-                        images[e + r] = res;
-                        setImages([...images]);
-                      });
+                      imagePickerHelper(setImages, 6);
                     }}
                     style={{
                       margin: 5,

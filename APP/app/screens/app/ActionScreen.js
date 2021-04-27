@@ -40,7 +40,7 @@ const ActionScreen = props => {
               // console.log("face_detect");
               if (isCallApiPredictDone) {
                 isCallApiPredictDone = false;
-                camera.current.takePictureAsync({ width: 600 }).then(res => {
+                camera.current.takePictureAsync({ width: 1000 }).then(res => {
                   const uri = res.uri;
                   callAPIHook({
                     API: upload_predict,
@@ -103,19 +103,32 @@ const ActionScreen = props => {
           ))}
           <ScrollView
             horizontal
-            children={labels.map(e => (
-              <View style={{ justifyContent: "center" }}>
+            children={labels.map((e, i) => (
+              <View
+                key={i}
+                style={{
+                  justifyContent: "center",
+                  backgroundColor: colors.primary,
+                  margin: 5,
+                  aspectRatio: 1,
+                  borderRadius: 5
+                }}
+              >
                 <WText
+                  font="bold18"
+                  color={colors.white}
                   style={{
                     margin: 10,
-                    textAlignVertical: "center"
+                    textAlign: "center"
                   }}
                   children={e.label}
                 />
                 <WText
+                  font="bold20"
+                  color={colors.white}
                   style={{
                     margin: 10,
-                    textAlignVertical: "center"
+                    textAlign: "center"
                   }}
                   children={e.time}
                 />
