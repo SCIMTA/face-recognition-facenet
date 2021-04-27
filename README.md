@@ -1,7 +1,7 @@
-# Face Recognition using FaceNet ăn trộm ăn cắp   
+# Face Recognition using FaceNet Chống trộm cắp online   
   
 ### Project: Ứng dụng điểm danh bằng mobile
-- Dev by [SCIMTA](https://github.com/SCIMTA) team
+- Dev by [SCIMTA](https://github.com/SCIMTA) team:
     - [dungx48](https://github.com/dungx48)
     - [neckgamervn](https://github.com/neckgamervn)
     - [quocanh199](https://github.com/quocanh199)
