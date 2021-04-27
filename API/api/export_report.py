@@ -21,7 +21,7 @@ def check_face(le, names):
     # print(year, month, day)
     folder_path = os.getcwd() + "/report/{}/{}".format(year, month)
     file_path = folder_path + "/{}.xlsx".format(day)
-    print(file_path)
+    # print(file_path)      ### debug
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     if not os.path.exists(file_path):
@@ -32,9 +32,14 @@ def check_face(le, names):
         print("Tạo báo cáo ngày {}/{}/{}".format(day, month, year))
 
     df = pd.read_excel(file_path, engine='openpyxl')
+
+    if (len(df['Họ tên']) != len(le.classes_)):
+        df_name = pd.DataFrame(columns=['Họ tên'], data=le.classes_)
+        df_new = pd.concat([df,df_name], axis=0).drop_duplicates(subset=['Họ tên']).reset_index(drop=True)
+        df = df_new
     for name in names:
-        print(name)
-        print("what the fuck?")
+        # print(name)
+        # print("what the fuck?")
         index = df.loc[df['Họ tên'] == name].index.tolist()[0]
 
         null_df = df[df['Giờ đến'].isnull()].index.tolist()

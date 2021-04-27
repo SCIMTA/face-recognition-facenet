@@ -48,7 +48,7 @@ def load_and_align_images(filepaths, margin):
     cascade = cv2.CascadeClassifier(cascade_path)
 
     aligned_images = []
-    print(filepaths)
+    # print(filepaths)
     for filepath in filepaths:
         print(filepath)
         img = cv2.imread(filepath)
@@ -83,7 +83,7 @@ def train(dir_basepath, names, max_num_img=10):
     embs = []
     for name in names:
         dirpath = os.path.abspath(dir_basepath + name)
-        print(dirpath)
+        # print(dirpath)
         filepaths = [os.path.join(dirpath, f) for f in os.listdir(dirpath)][:max_num_img]
         try:
             embs_ = calc_embs(filepaths)
