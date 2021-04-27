@@ -1,5 +1,5 @@
 <resources>
-	<string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">CfRi8pTBhTwk_D8M2NFn7MdEZAD98Y_jWLhSz</string>
+	<string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">1aw2hOriQ2Or_2RxiEoTd_brpBjxYQ2VEnmtw</string>
     <string name="app_name">Attendance SCI</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
