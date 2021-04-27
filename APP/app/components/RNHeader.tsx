@@ -67,6 +67,10 @@ export default class RNHeader extends Component<Props> {
     return (
       <Header
         placement="center"
+        backgroundImage={R.images.bg_header}
+        backgroundImageStyle={{
+          opacity: 0.8
+        }}
         containerStyle={{
           backgroundColor: theme.colors.headerColor,
           borderBottomColor: theme.colors.headerColor,

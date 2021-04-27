@@ -43,4 +43,4 @@ const MyApp = codePush({
 })(App);
 
 export default MyApp;
-//appcenter codepush release-react -a hoangnh5901/Logistics -d Production
+//appcenter codepush release-react -a hoangnh5901/Attendance-SCI -d Production

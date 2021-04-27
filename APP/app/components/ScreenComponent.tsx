@@ -90,7 +90,7 @@ export default class ScreenComponent extends Component<Props, ViewProps> {
             tintColor="#8b62a866"
             resizeMode="cover"
           >
-            {titleHeader && (
+            {!!titleHeader && (
               <RNHeader
                 titleHeader={titleHeader}
                 back={back}

@@ -14,6 +14,8 @@ import ModalView from "@app/components/ModalView";
 import { ScrollView } from "react-native";
 import { export_month_report } from "@app/constants/Api";
 import { Linking } from "react-native";
+import FastImg from "@app/components/FastImage";
+import R from "@app/assets/R";
 
 let fullMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const MainScreen = props => {
@@ -42,21 +44,20 @@ const MainScreen = props => {
     Linking.openURL(
       `http://128.199.108.177:8002/export_month_report?month=${month}&year=${year}`
     );
-    // callAPIHook({
-    //   API: export_month_report,
-    //   payload: {
-    //     month,
-    //     year
-    //   },
-    //   onSuccess: res => {
-    //     console.log(res);
-    //     setVisible(false);
-    //   }
-    // });
+  };
+  const selectBg = index => {
+    switch (index) {
+      case 0:
+        return R.images.bg_add;
+      case 1:
+        return R.images.bg_start;
+      case 2:
+        return R.images.bg_excel;
+    }
   };
   return (
     <ScreenComponent
-      titleHeader="ATT"
+      titleHeader="Chấm công"
       renderView={
         <>
           <ModalView
@@ -184,26 +185,39 @@ const MainScreen = props => {
               </>
             }
           />
-          {button.map(value => (
-            <TouchableOpacity
+          {button.map((value, index) => (
+            <FastImg
               key={value.title}
-              onPress={value.onPress}
+              resizeMode="cover"
+              source={selectBg(index)}
               style={{
-                alignSelf: "center",
                 flex: 1,
-                justifyContent: "center",
-                backgroundColor: colors.primary,
-                width: "80%",
-                marginVertical: 20,
-                borderRadius: 10
+                margin: 20,
+                borderRadius: 10,
+                justifyContent: "center"
               }}
               children={
-                <>
-                  <WText
-                    children={value.title}
-                    style={{ textAlign: "center" }}
-                  />
-                </>
+                <TouchableOpacity
+                  onPress={value.onPress}
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.6)",
+                    padding: "18%",
+                    marginHorizontal: 20,
+                    borderRadius: 10
+                  }}
+                  children={
+                    <>
+                      <WText
+                        font="bold24"
+                        children={value.title}
+                        color={colors.white}
+                        style={{
+                          textAlign: "center"
+                        }}
+                      />
+                    </>
+                  }
+                />
               }
             />
           ))}
