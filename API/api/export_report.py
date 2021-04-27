@@ -19,20 +19,24 @@ def check_face(le, names):
     gio_tan_lam = pd.Timestamp("17:00:00")
 
     # print(year, month, day)
-    folder_path = "report/{}/{}".format(year, month)
+    folder_path = os.getcwd() + "/report/{}/{}".format(year, month)
     file_path = folder_path + "/{}.xlsx".format(day)
-    if not os.path.exists(os.getcwd() + '/../{}'.format(folder_path)):
-        os.makedirs(os.getcwd() + '/../{}'.format(folder_path))
-    if not os.path.exists(os.getcwd() + '/../{}'.format(file_path)):
+    print(file_path)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    if not os.path.exists(file_path):
         df = pd.DataFrame(columns=['Họ tên', 'Giờ đến', 'Giờ về', 'Trạng thái'])
         df['Họ tên'] = le.classes_  ###
         # print(le.classes_)              ###
-        df.to_excel(os.getcwd() + '/../{}'.format(file_path), index=False)
+        df.to_excel(file_path, index=False)
         print("Tạo báo cáo ngày {}/{}/{}".format(day, month, year))
 
-    df = pd.read_excel(os.getcwd() + '/../{}'.format(file_path), engine='openpyxl')
+    df = pd.read_excel(file_path, engine='openpyxl')
     for name in names:
+        print(name)
+        print("what the fuck?")
         index = df.loc[df['Họ tên'] == name].index.tolist()[0]
+
         null_df = df[df['Giờ đến'].isnull()].index.tolist()
         if index in null_df:
             df.loc[index, 'Giờ đến'] = now.strftime("%H:%M:%S")
@@ -49,7 +53,7 @@ def check_face(le, names):
                 df.loc[index, 'Trạng thái'] = status.replace("V", "D")
     # print(now.strftime("%H:%M:%S"))
 
-    df.to_excel(os.getcwd() + '/../{}'.format(file_path), index=False)
+    df.to_excel(file_path, index=False)
 
 
 def generate_month_report(month, year):
