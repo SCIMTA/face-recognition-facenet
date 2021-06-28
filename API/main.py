@@ -30,7 +30,7 @@ async def _upload_person(name: str = Form(...),
             reload_model()
         except Exception as err:
             print(err)
-            return on_fail()
+            # return on_fail()
     return message
 
 @app.post("/upload_predict")
